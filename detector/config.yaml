@@ -1,0 +1,48 @@
+# All thresholds live here — nothing is hardcoded in Python
+
+log_path: /var/lib/docker/volumes/hng14-stage3_HNG-nginx-logs/_data/hng-access.log
+audit_log_path: /var/log/detector-audit.log
+
+# Sliding window
+per_ip_window_seconds: 60
+global_window_seconds: 60
+
+# Baseline
+baseline_window_seconds: 1800
+baseline_recalc_interval: 60
+min_samples_for_hour_slot: 60
+baseline_floor_mean: 0.1
+baseline_floor_stddev: 0.1
+
+# Detection thresholds
+zscore_threshold: 3.0
+rate_multiplier_threshold: 5.0
+
+# Error surge
+error_surge_multiplier: 3.0
+error_surge_zscore_reduction: 1.5
+error_surge_min_zscore: 1.0
+
+# Ban backoff schedule
+ban_durations:
+  - 600
+  - 1800
+  - 7200
+  - -1
+
+ip_ban_cooldown_seconds: 30
+global_alert_cooldown_seconds: 60
+
+# iptables
+enable_iptables: true
+
+# Slack
+slack_webhook_url: 'https://hooks.slack.com/services/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'
+
+# Dashboard
+dashboard_host: '0.0.0.0'
+dashboard_port: 5000
+dashboard_refresh_seconds: 3
+
+# Unbanner
+unban_check_interval_seconds: 10
