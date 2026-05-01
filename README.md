@@ -13,19 +13,19 @@ https://github.com/gbadedata/hng14-stage3
 
 ## Language Choice
 
-Python — chosen for its strong standard library (`collections.deque`, `threading`, `subprocess`), rapid development speed, and `psutil` for system metrics. Python's threading model is sufficient for I/O-bound tasks like log tailing and HTTP alerting.
+Python - chosen for its strong standard library (`collections.deque`, `threading`, `subprocess`), rapid development speed, and `psutil` for system metrics. Python's threading model is sufficient for I/O-bound tasks like log tailing and HTTP alerting.
 
 ## How the Sliding Window Works
 
-Each IP gets its own `SlidingWindowCounter` instance backed by a `collections.deque`. Every incoming request appends a float timestamp to the **right** of the deque. On every `add()` call and every `rate()` query, stale timestamps are evicted from the **left** of the deque using `popleft()` while the leftmost entry is older than `window_seconds` (60s) from now. Rate is calculated as `len(deque) / window_seconds` — giving an exact rolling requests-per-second with no bucketing or approximation. A separate global `SlidingWindowCounter` tracks all traffic combined. No rate-limiting libraries are used — pure `deque` logic only.
+Each IP gets its own `SlidingWindowCounter` instance backed by a `collections.deque`. Every incoming request appends a float timestamp to the **right** of the deque. On every `add()` call and every `rate()` query, stale timestamps are evicted from the **left** of the deque using `popleft()` while the leftmost entry is older than `window_seconds` (60s) from now. Rate is calculated as `len(deque) / window_seconds` - giving an exact rolling requests-per-second with no bucketing or approximation. A separate global `SlidingWindowCounter` tracks all traffic combined. No rate-limiting libraries are used - pure `deque` logic only.
 
 ## How the Baseline Works
 
-`BaselineTracker` maintains a `collections.deque` of `(timestamp, count)` tuples — one entry per completed second of traffic. The window covers the last **1800 seconds (30 minutes)**. Entries older than 1800s are evicted from the left. Every **60 seconds**, `_recalculate()` computes population mean and stddev from the window samples. Per-hour slots (`{hour: [counts]}`) are also maintained — when the current hour has >= 60 samples, that slot is preferred over the full rolling window, allowing the baseline to adapt to time-of-day patterns. Floor values (`baseline_floor_mean: 0.1`, `baseline_floor_stddev: 0.1`) prevent division-by-zero and nonsense z-scores at startup. The `effective_mean` is always computed from real traffic — never hardcoded.
+`BaselineTracker` maintains a `collections.deque` of `(timestamp, count)` tuples — one entry per completed second of traffic. The window covers the last **1800 seconds (30 minutes)**. Entries older than 1800s are evicted from the left. Every **60 seconds**, `_recalculate()` computes population mean and stddev from the window samples. Per-hour slots (`{hour: [counts]}`) are also maintained - when the current hour has >= 60 samples, that slot is preferred over the full rolling window, allowing the baseline to adapt to time-of-day patterns. Floor values (`baseline_floor_mean: 0.1`, `baseline_floor_stddev: 0.1`) prevent division-by-zero and nonsense z-scores at startup. The `effective_mean` is always computed from real traffic - never hardcoded.
 
 ## How Detection Works
 
-For each IP: `zscore = (current_rate - effective_mean) / effective_stddev`. Flagged as anomalous if `zscore >= 3.0` OR `rate >= 5x effective_mean` — whichever fires first. During error surges (IP's 4xx/5xx rate >= 3x baseline error rate), the z-score threshold is reduced by 1.5 (minimum 1.0). Per-IP anomaly triggers iptables DROP + Slack alert within 10 seconds. Global anomaly triggers Slack alert only.
+For each IP: `zscore = (current_rate - effective_mean) / effective_stddev`. Flagged as anomalous if `zscore >= 3.0` OR `rate >= 5x effective_mean` - whichever fires first. During error surges (IP's 4xx/5xx rate >= 3x baseline error rate), the z-score threshold is reduced by 1.5 (minimum 1.0). Per-IP anomaly triggers iptables DROP + Slack alert within 10 seconds. Global anomaly triggers Slack alert only.
 
 ## How iptables Blocking Works
 
@@ -105,7 +105,7 @@ curl http://dashboard.gbadedata.com/api/metrics
 ```
 hng14-stage3/
 ├── detector/
-│   ├── main.py         # Entry point — wires all modules
+│   ├── main.py         # Entry point - wires all modules
 │   ├── monitor.py      # Log file tailer and JSON parser
 │   ├── baseline.py     # Rolling 30-min baseline tracker
 │   ├── detector.py     # Sliding windows + anomaly detection
