@@ -1,4 +1,4 @@
-# HNG14 Stage 3 — Anomaly Detection Engine
+# HNG14 Stage 3 - Anomaly Detection Engine
 
 A real-time DDoS/anomaly detection daemon built for cloud.ng (Nextcloud). Watches all incoming HTTP traffic, learns normal baseline behaviour, and automatically blocks suspicious IPs via iptables.
 
