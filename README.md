@@ -39,20 +39,20 @@ On detection: `iptables -I INPUT -s IP -j DROP` is called via `subprocess`. Bans
 - Python 3.11+
 - Root access (for iptables)
 
-### Step 1 — Clone and start the Docker stack
+### Step 1 - Clone and start the Docker stack
 ```bash
 git clone https://github.com/gbadedata/hng14-stage3.git
 cd hng14-stage3
 docker compose up -d
 ```
 
-### Step 2 — Find the log volume path
+### Step 2 - Find the log volume path
 ```bash
 docker volume inspect hng14-stage3_HNG-nginx-logs
 # Note the Mountpoint path
 ```
 
-### Step 3 — Configure the detector
+### Step 3 - Configure the detector
 ```bash
 cd detector
 nano config.yaml
@@ -60,7 +60,7 @@ nano config.yaml
 # Set slack_webhook_url to your Slack webhook
 ```
 
-### Step 4 — Install Python dependencies
+### Step 4 - Install Python dependencies
 ```bash
 python3 -m venv venv
 source venv/bin/activate
@@ -68,7 +68,7 @@ pip install -r requirements.txt
 deactivate
 ```
 
-### Step 5 — Run as a systemd service
+### Step 5 - Run as a systemd service
 ```bash
 cat > /etc/systemd/system/hng-detector.service << 'SVCEOF'
 [Unit]
@@ -94,7 +94,7 @@ systemctl enable hng-detector
 systemctl start hng-detector
 ```
 
-### Step 6 — Verify
+### Step 6 - Verify
 ```bash
 systemctl status hng-detector
 curl http://dashboard.gbadedata.com/api/metrics
