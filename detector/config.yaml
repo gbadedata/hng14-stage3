@@ -37,7 +37,7 @@ global_alert_cooldown_seconds: 60
 enable_iptables: true
 
 # Slack
-slack_webhook_url: 'https://hooks.slack.com/services/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'
+slack_webhook_url: 'YOUR_SLACK_WEBHOOK_URL'
 
 # Dashboard
 dashboard_host: '0.0.0.0'
